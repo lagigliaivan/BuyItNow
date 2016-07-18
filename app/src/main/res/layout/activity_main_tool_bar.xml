@@ -2,7 +2,8 @@
 <LinearLayout android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:clickable="true">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -41,18 +42,28 @@
         android:layout_height="fill_parent"
         android:clickable="true">
 
-        <ExpandableListView
+        <!--<ExpandableListView
             android:id="@+id/listView_show_purchases"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
             android:visibility="visible"
-            android:contextClickable="true"
+            android:contextClickable="false"
             android:fastScrollAlwaysVisible="false"
             android:fastScrollEnabled="false"
             android:layout_alignParentStart="false"
             android:layout_above="@+id/main_tool_bar">
-        </ExpandableListView>
+        </ExpandableListView>-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listView_show_purchases"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:visibility="visible"
+            android:layout_above="@+id/main_tool_bar">
+        </android.support.v7.widget.RecyclerView>
+
 
         <android.support.v7.widget.Toolbar
             xmlns:android="http://schemas.android.com/apk/res/android"

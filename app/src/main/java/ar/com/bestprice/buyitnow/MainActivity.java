@@ -5,10 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -19,10 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import ar.com.bestprice.buyitnow.dto.Item;
 import ar.com.bestprice.buyitnow.dto.Purchase;
@@ -33,7 +33,7 @@ import ar.com.bestprice.buyitnow.dto.PurchasesByMonthContainer;
 public class MainActivity extends AppCompatActivity {
 
 
-    private ExpandableListView listView = null;
+    private RecyclerView listView = null;
 
     //Contains the purchases returned by the server
     private PurchasesByMonthContainer purchasesContainer = null;
@@ -59,38 +59,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private MyExpandableListAdapter getListViewAdapter(PurchasesByMonthContainer purchasesContainer) {
+    private RecyclerListAdapter getListViewAdapter(PurchasesByMonthContainer purchasesContainer) {
 
         Map<Integer, PurchasesGroup> groups = getPurchasesByMonth(purchasesContainer.getPurchasesByMonth());
-        return new MyExpandableListAdapter(this, groups);
+        return new RecyclerListAdapter(this, groups);
 
     }
 
-    private String sendHttpRequest() {
-
-        final ExecutorService service = Executors.newFixedThreadPool(1);
-        final Future<String> task;
-        String jsonString = "";
-
-        String serviceURL = Context.getContext().getServiceURL();
-
-        task = service.submit(new GETServiceClient(serviceURL + "/purchases?groupBy=month", Context.getContext().getSha1()));
-
-        try {
-            jsonString = task.get();
-        } catch (final InterruptedException | ExecutionException ex) {
-            ex.printStackTrace();
-        } finally {
-            service.shutdownNow();
-        }
-
-        return jsonString;
-    }
-
-    private ExpandableListView getListView() {
+    /*private ExpandableListView getListView() {
 
         if(this.listView == null) {
             this.listView = (ExpandableListView) findViewById(R.id.listView_show_purchases);
+        }
+
+        return listView;
+    }*/
+
+
+    private RecyclerView getListView() {
+
+        if(this.listView == null) {
+            this.listView = (RecyclerView) findViewById(R.id.listView_show_purchases);
         }
 
         return listView;
@@ -291,10 +280,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void renderList(PurchasesByMonthContainer purchasesContainer) {
 
-        MyExpandableListAdapter adapter = getListViewAdapter(purchasesContainer);
+       // MyExpandableListAdapter adapter = getListViewAdapter(purchasesContainer);
 
-        ExpandableListView listView = getListView();
+
+
+        RecyclerListAdapter adapter = getListViewAdapter(purchasesContainer);
+
+
+        RecyclerView listView = getListView();
         listView.setAdapter(adapter);
+
+
+        //RecyclerView recyclerView = new RecyclerView(this.getApplicationContext());
+        listView.setHasFixedSize(true);
+        listView.setAdapter(adapter);
+        listView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(listView);
 
 
         Map<Integer, PurchasesGroup> purchases = getPurchasesByMonth(purchasesContainer.getPurchasesByMonth());

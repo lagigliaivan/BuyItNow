@@ -1,39 +1,70 @@
 package ar.com.bestprice.buyitnow;
 
 import android.app.Activity;
+import android.database.DataSetObserver;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.util.SparseArray;
+import android.support.v4.view.MotionEventCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
-import android.widget.ExpandableListView;
+import android.widget.ExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import java.util.List;
 import java.util.Map;
 
 import ar.com.bestprice.buyitnow.dto.Item;
 
+/**
+ * Created by ivan on 17/07/16.
+ */
+public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+        implements ItemTouchHelperAdapter, ExpandableListAdapter {
 
-public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
     private final Map<Integer, PurchasesGroup> groups;
     public LayoutInflater inflater;
     public Activity activity;
+    private final OnStartDragListener mDragStartListener = null;
 
 
-    public MyExpandableListAdapter(Activity act, Map<Integer, PurchasesGroup> groups) {
+    public RecyclerListAdapter(Activity act, Map<Integer, PurchasesGroup> groups) {
+
         activity = act;
         this.groups = groups;
         inflater = act.getLayoutInflater();
+    }
+
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                //Collections.swap(mItems, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                //Collections.swap(mItems, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        //mItems.remove(position);
+        notifyItemRemoved(position);
     }
 
     @Override
@@ -62,12 +93,12 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
         int icon = Category.MERCADERIA.getIcon();
         if (children.getCategory() != null) {
-                icon = children.getCategory().getIcon();
+            icon = children.getCategory().getIcon();
         }
 
         itemDescription.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
 
-        itemDescription.setOnClickListener(new OnClickListener() {
+        itemDescription.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -105,14 +136,25 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return groups.size();
     }
 
+
     @Override
-    public void onGroupCollapsed(int groupPosition) {
-        super.onGroupCollapsed(groupPosition);
+    public void registerDataSetObserver(DataSetObserver observer) {
+
     }
 
     @Override
-    public void onGroupExpanded(int groupPosition) {
-        super.onGroupExpanded(groupPosition);
+    public void unregisterDataSetObserver(DataSetObserver observer) {
+
+    }
+
+    @Override
+    public long getCombinedChildId(long groupId, long childId) {
+        return 0;
+    }
+
+    @Override
+    public long getCombinedGroupId(long groupId) {
+        return 0;
     }
 
     @Override
@@ -156,18 +198,87 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
     }
 
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+    }
+
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+
+    }
+
     public Object removeChild(int groupPosition, int childPosition) {
 
         return groups.get(groupPosition).children.remove(childPosition);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return null;
+    }
+
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+
+        final ItemViewHolder itemView = (ItemViewHolder)holder;
+        itemView.textView.setText(this.groups.get(position).getString());
+
+            // Start a drag whenever the handle view it touched
+        itemView.handleView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                    //mDragStartListener.onStartDrag(itemView);
+                }
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return 0;
+    }
+
+    public static class ItemViewHolder extends RecyclerView.ViewHolder implements
+            ItemTouchHelperViewHolder {
+
+        public final TextView textView;
+        public final ImageView handleView;
+
+        public ItemViewHolder(View itemView) {
+            super(itemView);
+            textView = (TextView) itemView.findViewById(R.id.text);
+            handleView = (ImageView) itemView.findViewById(R.id.handle);
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(0);
+        }
     }
 }
