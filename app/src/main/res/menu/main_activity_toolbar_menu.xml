@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+    <item android:id="@+id/filter_by"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        app:showAsAction="always"
+        android:title="@string/filter_by"/>
+
     <item android:id="@+id/refresh_purchases"
         android:icon="@drawable/ic_refresh_white_24dp"
         app:showAsAction="always"

@@ -8,9 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -187,6 +189,20 @@ public class MainActivity extends AppCompatActivity {
 
                 builder.show();
 
+                break;
+
+            case R.id.filter_by:
+
+                final MultiSelectionSpinner spinner = (MultiSelectionSpinner) findViewById(R.id.filter_by_spinner);
+
+                Button bt = (Button) findViewById(R.id.getSelected);
+                bt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String s = spinner.getSelectedItemsAsString();
+                        Log.e("getSelected", s);
+                    }
+                });
                 break;
         }
 

@@ -70,7 +70,7 @@
     <string name="add_item_barcode">Agregar Item usando codigo de barras</string>
     <string name="refresh_purchases_list">Refrescar lista</string>
     <string name="save_purchase">Guardar compra</string>
-
+    <string name="filter_by">Filtrar por</string>
 
     <string name="add_item_price">Precio</string>
     <string name="add_item_description">Descripcion</string>

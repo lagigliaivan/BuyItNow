@@ -70,6 +70,7 @@
     <string name="add_item_barcode">Add Item Reading Code Bar</string>
     <string name="refresh_purchases_list">Refresh purchases list</string>
     <string name="save_purchase">Save purchase</string>
+    <string name="filter_by">Filter by</string>
 
 
     <string name="add_item_price">Price</string>
