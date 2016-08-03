@@ -90,6 +90,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
                 Date date = new Date(Long.parseLong(purchase.getId()) * 1000);
                 purchaseDateTime.setTime(date);
 
+                stringBuffer.append("Lugar:");
+                stringBuffer.append(purchase.getShop());
+                stringBuffer.append("\n");
+
+
                 stringBuffer.append("Dia: ");
                 stringBuffer.append(purchaseDateTime.get(Calendar.DAY_OF_MONTH));
                 stringBuffer.append("/");

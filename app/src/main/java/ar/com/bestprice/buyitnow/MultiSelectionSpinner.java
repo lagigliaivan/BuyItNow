@@ -2,6 +2,7 @@ package ar.com.bestprice.buyitnow;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Rect;
 import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
@@ -20,10 +21,9 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
     ArrayAdapter<String> simple_adapter;
 
     public MultiSelectionSpinner(Context context) {
-        super(context);
 
-        simple_adapter = new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_item);
+        super(context);
+        simple_adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
         super.setAdapter(simple_adapter);
     }
 
@@ -54,6 +54,12 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
         builder.show();
         return true;
     }
+
+    @Override
+    protected void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
+        super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
+    }
+
 
     @Override
     public void setAdapter(SpinnerAdapter adapter) {

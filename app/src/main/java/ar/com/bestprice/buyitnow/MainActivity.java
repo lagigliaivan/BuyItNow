@@ -12,14 +12,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +48,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tool_bar);
         renderView();
+
+        final MultiSelectionSpinner spinner = (MultiSelectionSpinner) this.findViewById(R.id.filter_by_spinner);
+
+        List<String> categories = new ArrayList<>();
+
+        categories.add("Filter by: ALL");
+
+        for (Category cat : Category.values()) {
+
+            categories.add(cat.getName());
+        }
+
+        spinner.setItems(categories);
+
+        spinner.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                v.toString();
+            }
+        });
+
+
     }
 
     private void renderView() {
@@ -191,19 +217,30 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
 
-            case R.id.filter_by:
+            /*case R.id.filter_by:
 
-                final MultiSelectionSpinner spinner = (MultiSelectionSpinner) findViewById(R.id.filter_by_spinner);
 
-                Button bt = (Button) findViewById(R.id.getSelected);
+
+                final MultiSelectionSpinner spinner = (MultiSelectionSpinner) this.findViewById(R.id.filter_by_spinner);
+
+                List<String> cats = new ArrayList<>();
+
+                for (Category cat : Category.values()) {
+
+                    cats.add(cat.getName());
+                }
+
+                spinner.setItems(cats);
+
+                *//* Button bt = (Button) findViewById(R.id.getSelected);
                 bt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String s = spinner.getSelectedItemsAsString();
                         Log.e("getSelected", s);
                     }
-                });
-                break;
+                });*//*
+                break;*/
         }
 
         return super.onOptionsItemSelected(item);
