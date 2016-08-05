@@ -49,27 +49,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_tool_bar);
         renderView();
 
-        final MultiSelectionSpinner spinner = (MultiSelectionSpinner) this.findViewById(R.id.filter_by_spinner);
-
-        List<String> categories = new ArrayList<>();
-
-        categories.add("Filter by: ALL");
-
-        for (Category cat : Category.values()) {
-
-            categories.add(cat.getName());
-        }
-
-        spinner.setItems(categories);
-
-        spinner.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                v.toString();
-            }
-        });
-
-
     }
 
     private void renderView() {
@@ -184,13 +163,10 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Ingrese descripcion a buscar");
 
-                // Set up the input
                 final EditText input = new EditText(this);
-                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
 
-                // Set up the buttons
+                builder.setView(input);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                     @Override
@@ -217,31 +193,69 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
 
-            /*case R.id.filter_by:
+            case R.id.filter_purchases:
 
 
+                final List<CharSequence> items = new ArrayList<>();
+                final CharSequence[] array = new CharSequence[Category.values().length];
 
-                final MultiSelectionSpinner spinner = (MultiSelectionSpinner) this.findViewById(R.id.filter_by_spinner);
-
-                List<String> cats = new ArrayList<>();
-
-                for (Category cat : Category.values()) {
-
-                    cats.add(cat.getName());
+                for(Category cat : Category.values()){
+                  items.add(cat.getName());
                 }
 
-                spinner.setItems(cats);
+                // arraylist to keep the selected items
+                final List<Integer> selectedItems = new ArrayList();
 
-                *//* Button bt = (Button) findViewById(R.id.getSelected);
-                bt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String s = spinner.getSelectedItemsAsString();
-                        Log.e("getSelected", s);
-                    }
-                });*//*
-                break;*/
+                AlertDialog.Builder b = new AlertDialog.Builder(this);
+                b.setTitle("Seleccione las categorias a filtrar");
+                b.setMultiChoiceItems(items.toArray(array), null,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                            // indexSelected contains the index of item (of which checkbox checked)
+                            @Override
+                            public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                                if (isChecked) {
+                                    selectedItems.add(indexSelected);
+                                } else if (selectedItems.contains(indexSelected)) {
+                                    selectedItems.remove(Integer.valueOf(indexSelected));
+                                }
+                            }
+                        })
+                        // Set the action buttons
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                if(selectedItems.size() != 0) {
+
+                                    List<Category> categories = new ArrayList<>();
+
+                                    for (Integer i : selectedItems) {
+                                        categories.add(Category.values()[i]);
+                                    }
+
+                                    List purchasesByMonth = getPurchasesByCategory(categories, purchasesContainer.getPurchasesByMonth());
+
+                                    PurchasesByMonthContainer container = new PurchasesByMonthContainer();
+                                    container.setPurchasesByMonth(purchasesByMonth);
+
+                                    renderList(container);
+                                }else {
+                                    renderList(purchasesContainer);
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                selectedItems.clear();
+                            }
+                        });
+
+                AlertDialog dialog = b.create();//AlertDialog dialog; create like this outside onClick
+                dialog.show();
+                break;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -371,6 +385,7 @@ public class MainActivity extends AppCompatActivity {
         average.setText(String.format("Promedio mensual: $%.2f", purchasesAverage));
         accumulated.setText(String.format("Acumulado: $%.2f", accumPurchases));
 
+        listView.expandGroup(purchases.values().size() - 1 ); //Expand the last month
     }
 
     private PurchasesByMonthContainer parseJsonString(String json){
@@ -409,6 +424,50 @@ public class MainActivity extends AppCompatActivity {
                 for(Item item: purchase.getItems()){
 
                     if(item.getDescription().contains(pattern)){
+
+                        if (pWhereItemWasFound == null){
+                            pWhereItemWasFound = new Purchase();
+                            pWhereItemWasFound.setTime(purchase.getTime());
+                        }
+
+                        pWhereItemWasFound.addItem(item);
+                    }
+                }
+
+                if(pWhereItemWasFound != null){
+                    if(pByMonthWhereItemWasFound == null) {
+                        pByMonthWhereItemWasFound = new PurchasesByMonth();
+                        pByMonthWhereItemWasFound.setMonth(pByMonth.getMonth());
+                    }
+                    pByMonthWhereItemWasFound.addPurchase(pWhereItemWasFound);
+                }
+            }
+
+            if(pByMonthWhereItemWasFound != null) {
+                byMonths.add(pByMonthWhereItemWasFound);
+            }
+        }
+
+        return byMonths;
+    }
+
+    private List<PurchasesByMonth> getPurchasesByCategory(List<Category> categories, List<PurchasesByMonth> purchasesByMonths){
+
+        List<PurchasesByMonth> byMonths = new ArrayList<>();
+
+
+        for(PurchasesByMonth pByMonth : purchasesByMonths){
+
+            PurchasesByMonth pByMonthWhereItemWasFound = null;
+
+            for (Purchase purchase : pByMonth.getPurchases()){
+
+
+                Purchase pWhereItemWasFound = null;
+
+                for(Item item: purchase.getItems()){
+
+                    if(categories.contains(item.getCategory())){
 
                         if (pWhereItemWasFound == null){
                             pWhereItemWasFound = new Purchase();
