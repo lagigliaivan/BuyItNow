@@ -511,9 +511,10 @@ public class MainActivity extends AppCompatActivity {
                     if(categories.contains(item.getCategory())){
 
                         if (pWhereItemWasFound == null){
-                            pWhereItemWasFound = purchase;
-                            /*pWhereItemWasFound.setId(purchase.getId());
-                            pWhereItemWasFound.setTime(purchase.getTime());*/
+                            pWhereItemWasFound = new Purchase();
+                            pWhereItemWasFound.setId(purchase.getId());
+                            pWhereItemWasFound.setTime(purchase.getTime());
+                            pWhereItemWasFound.setShop(purchase.getShop());
                         }
 
                         pWhereItemWasFound.addItem(item);
