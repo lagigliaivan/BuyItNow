@@ -4,17 +4,33 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +55,7 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
     ListView listView = null;
     ArrayAdapter<String> adapter = null;
     List<Item> items = new ArrayList<>();
+    private  PopupWindow pw = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +76,7 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
                 itemsAsString.add(i.toString());
             }
 
-            adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, android.R.id.text1, itemsAsString);
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, itemsAsString);
 
             listView.setAdapter(adapter);
         }
@@ -71,30 +87,129 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(AddNewPurchaseActivity.this.LAYOUT_INFLATER_SERVICE);
+        final View layout = inflater.inflate(R.layout.activity_add_purchase_item,(ViewGroup) findViewById(R.id.add_purchase_popup));
+        pw = getPopUp(layout);
+
+
+        if(toolbar != null) {
+            toolbar.post(new Runnable() {
+                public void run() {
+                    try {
+                        pw.showAtLocation(layout, Gravity.CENTER, 0, 30);
+                        showKeyboard();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
 
     }
+
+    private void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+
+    private void addItem(Item item){
+
+        listView = (ListView) findViewById(R.id.listview_show_items_in_a_purchase);
+        items.add(item);
+
+        List itemsAsString = new ArrayList();
+
+        for (Item i: items ){
+            itemsAsString.add(i.toString());
+        }
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, itemsAsString);
+
+        listView.setAdapter(adapter);
+        pw.dismiss();
+
+    }
+
+    @NonNull
+    private PopupWindow getPopUp(final View layout) {
+
+        Spinner spinner = (Spinner) layout.findViewById(R.id.spinner);
+        ArrayList arraySpinner = new ArrayList();
+
+        for (Category c : Category.values()) {
+            arraySpinner.add(c);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arraySpinner);
+        spinner.setAdapter(adapter);
+
+        Button addItemButton = (Button) layout.findViewById(R.id.add_item_button);
+
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                EditText description = (EditText)layout.findViewById(R.id.item_description);
+                EditText price = (EditText)layout.findViewById(R.id.item_price);
+
+                Spinner spinner = (Spinner)layout.findViewById(R.id.spinner);
+
+                TextView textView = (TextView)spinner.getSelectedView();
+                String category = textView.getText().toString();
+
+                MessageDigest crypt = null;
+
+                try {
+                    crypt = MessageDigest.getInstance("SHA-1");
+                    crypt.reset();
+                    crypt.update(description.getText().toString().getBytes("UTF-8"));
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                String itemId = Context.byteToHex(crypt.digest());
+
+                Item item = new Item();
+                item.setId(itemId);
+                item.setDescription(description.getText().toString());
+                item.setPrice(Float.valueOf(price.getText().toString()));
+                item.setCategory(category);
+
+                addItem(item);
+
+
+
+            }
+        });
+
+        return new PopupWindow(layout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        if (resultCode == CommonStatusCodes.SUCCESS && data != null) {
 
-            if (resultCode == CommonStatusCodes.SUCCESS && data != null) {
+            Item item = (Item) data.getSerializableExtra(Constants.ITEM);
+            items.add(item);
 
-                    Item item = (Item) data.getSerializableExtra(Constants.ITEM);
-                    items.add(item);
+            List itemsAsString = new ArrayList();
 
-                    List itemsAsString = new ArrayList();
-
-                    for (Item i : items) {
-                        itemsAsString.add(i.toString());
-                    }
-
-                    ArrayAdapter adapter = new ArrayAdapter<>(this,
-                            android.R.layout.simple_list_item_1, android.R.id.text1, itemsAsString);
-
-                    listView.setAdapter(adapter);
+            for (Item i : items) {
+                itemsAsString.add(i.toString());
             }
+
+            ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, itemsAsString);
+
+            listView.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -110,12 +225,18 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
 
             case R.id.add_item:
 
-                Intent intent = new Intent(this.getApplicationContext(), AddItemActivity.class);
+                try {
 
-                //Adding an extra param for AddItemActivity to know if AddNewPurchase activity has to be started or
-                //the captured item has just to be returned.
-                intent.putExtra(Constants.CALLING_ACTIVITY, Constants.NEW_PURCHASE);
-                startActivityForResult(intent, Constants.NEW_PURCHASE);
+                    LayoutInflater inflater = (LayoutInflater) this.getSystemService(this.getApplicationContext().LAYOUT_INFLATER_SERVICE);
+                    View layout = inflater.inflate(R.layout.activity_add_purchase_item,(ViewGroup) findViewById(R.id.add_purchase_popup));
+                    pw = getPopUp(layout);
+                    pw.showAtLocation(layout, Gravity.CENTER, 0,30);
+
+                    showKeyboard();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 break;
 

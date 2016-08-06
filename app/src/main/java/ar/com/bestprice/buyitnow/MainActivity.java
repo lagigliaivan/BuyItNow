@@ -1,8 +1,7 @@
 package ar.com.bestprice.buyitnow;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.os.Bundle;
 import android.support.annotation.BoolRes;
 import android.support.annotation.NonNull;
@@ -11,14 +10,19 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -153,9 +157,11 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.add_item:
 
-                Intent intent = new Intent(this.getApplicationContext(), AddItemActivity.class);
+                //Intent intent = new Intent(this.getApplicationContext(), AddItemActivity.class);
+                Intent intent = new Intent(this.getApplicationContext(), AddNewPurchaseActivity.class);
                 intent.putExtra(Constants.CALLING_ACTIVITY, Constants.MAIN_ACTIVITY);
                 startActivity(intent);
+
                 break;
 
             case R.id.refresh_purchases:
@@ -185,6 +191,9 @@ public class MainActivity extends AppCompatActivity {
                         container.setPurchasesByMonth(purchasesByMonth);
 
                         renderList(container);
+                        InputMethodManager imm = (InputMethodManager)getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+
+                        imm.hideSoftInputFromWindow( getListView().getWindowToken(), 0);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -193,6 +202,9 @@ public class MainActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
                 builder.show();
 
