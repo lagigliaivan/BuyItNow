@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.BoolRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Contains the purchases returned by the server
     private PurchasesByMonthContainer purchasesContainer = null;
+
+    private final Map<Category, Boolean> lastSelectedItems = new LinkedHashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,27 +201,49 @@ public class MainActivity extends AppCompatActivity {
             case R.id.filter_purchases:
 
 
+
                 final List<CharSequence> items = new ArrayList<>();
                 final CharSequence[] array = new CharSequence[Category.values().length];
 
                 for(Category cat : Category.values()){
-                  items.add(cat.getName());
-                }
+                    items.add(cat.getName());
 
-                // arraylist to keep the selected items
-                final List<Integer> selectedItems = new ArrayList();
+                }
 
                 AlertDialog.Builder b = new AlertDialog.Builder(this);
                 b.setTitle("Seleccione las categorias a filtrar");
-                b.setMultiChoiceItems(items.toArray(array), null,
+
+
+
+                if(lastSelectedItems.size() == 0){
+                    for (Category cat : Category.values()){
+                        lastSelectedItems.put(cat, false);
+                    }
+                }
+
+                boolean[] checked = new boolean[lastSelectedItems.size()];
+
+                int i = 0;
+                for(Boolean c : lastSelectedItems.values()){
+
+                    checked[i] = c;
+                    i++;
+                }
+
+                final List<Integer> selectedItems = new ArrayList();
+                final List<Integer> deSelectedItems = new ArrayList();
+
+                b.setMultiChoiceItems(items.toArray(array), checked ,
                 new DialogInterface.OnMultiChoiceClickListener() {
+
+
                             // indexSelected contains the index of item (of which checkbox checked)
                             @Override
                             public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
                                 if (isChecked) {
                                     selectedItems.add(indexSelected);
-                                } else if (selectedItems.contains(indexSelected)) {
-                                    selectedItems.remove(Integer.valueOf(indexSelected));
+                                } else {
+                                    deSelectedItems.add(indexSelected);
                                 }
                             }
                         })
@@ -225,13 +252,22 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
 
-                                if(selectedItems.size() != 0) {
+                                for(Integer i : selectedItems){
+                                    lastSelectedItems.put(Category.values()[i], true);
+                                }
+                                for(Integer i : deSelectedItems){
+                                    lastSelectedItems.put(Category.values()[i], false);
+                                }
 
-                                    List<Category> categories = new ArrayList<>();
+                                List<Category> categories = new ArrayList();
 
-                                    for (Integer i : selectedItems) {
-                                        categories.add(Category.values()[i]);
+                                for(Category cat : lastSelectedItems.keySet()){
+                                    if (lastSelectedItems.get(cat) == true) {
+                                        categories.add(cat);
                                     }
+                                }
+
+                                if(categories.size() != 0){
 
                                     List purchasesByMonth = getPurchasesByCategory(categories, purchasesContainer.getPurchasesByMonth());
 
@@ -242,12 +278,15 @@ public class MainActivity extends AppCompatActivity {
                                 }else {
                                     renderList(purchasesContainer);
                                 }
+                                selectedItems.clear();
+                                deSelectedItems.clear();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 selectedItems.clear();
+                                deSelectedItems.clear();
                             }
                         });
 
@@ -385,7 +424,9 @@ public class MainActivity extends AppCompatActivity {
         average.setText(String.format("Promedio mensual: $%.2f", purchasesAverage));
         accumulated.setText(String.format("Acumulado: $%.2f", accumPurchases));
 
-        listView.expandGroup(purchases.values().size() - 1 ); //Expand the last month
+        if(purchases.values().size() > 0 ) {
+            listView.expandGroup(purchases.values().size() - 1); //Expand the last month
+        }
     }
 
     private PurchasesByMonthContainer parseJsonString(String json){
@@ -470,8 +511,9 @@ public class MainActivity extends AppCompatActivity {
                     if(categories.contains(item.getCategory())){
 
                         if (pWhereItemWasFound == null){
-                            pWhereItemWasFound = new Purchase();
-                            pWhereItemWasFound.setTime(purchase.getTime());
+                            pWhereItemWasFound = purchase;
+                            /*pWhereItemWasFound.setId(purchase.getId());
+                            pWhereItemWasFound.setTime(purchase.getTime());*/
                         }
 
                         pWhereItemWasFound.addItem(item);
