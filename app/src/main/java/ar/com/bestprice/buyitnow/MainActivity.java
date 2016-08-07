@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                 groups.put(j, purchasesGroup);
                 j++;
             }
-
         }
 
         return groups;
@@ -159,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Intent intent = new Intent(this.getApplicationContext(), AddItemActivity.class);
                 Intent intent = new Intent(this.getApplicationContext(), AddNewPurchaseActivity.class);
-                intent.putExtra(Constants.CALLING_ACTIVITY, Constants.MAIN_ACTIVITY);
+                //intent.putExtra(Constants.CALLING_ACTIVITY, Constants.MAIN_ACTIVITY);
                 startActivity(intent);
 
                 break;
@@ -481,6 +480,8 @@ public class MainActivity extends AppCompatActivity {
                         if (pWhereItemWasFound == null){
                             pWhereItemWasFound = new Purchase();
                             pWhereItemWasFound.setTime(purchase.getTime());
+                            pWhereItemWasFound.setId(purchase.getId());
+                            pWhereItemWasFound.setShop(purchase.getShop());
                         }
 
                         pWhereItemWasFound.addItem(item);

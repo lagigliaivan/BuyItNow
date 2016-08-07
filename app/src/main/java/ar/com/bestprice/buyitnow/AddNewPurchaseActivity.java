@@ -63,24 +63,6 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_purchase_tool_bar);
 
-        Item item = (Item)getIntent().getSerializableExtra(Constants.ITEM);
-
-        if(item != null) {
-
-            listView = (ListView) findViewById(R.id.listview_show_items_in_a_purchase);
-            items.add(item);
-
-            List itemsAsString = new ArrayList();
-
-            for (Item i: items ){
-                itemsAsString.add(i.toString());
-            }
-
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, itemsAsString);
-
-            listView.setAdapter(adapter);
-        }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.new_purchase_toolbar);
 
         setSupportActionBar(toolbar);
@@ -149,6 +131,7 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
         Button addItemButton = (Button) layout.findViewById(R.id.add_item_button);
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
@@ -173,6 +156,9 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
 
+                if(description.getText().toString().isEmpty() || price.getText().toString().isEmpty()){
+                    return;
+                }
                 String itemId = Context.byteToHex(crypt.digest());
 
                 Item item = new Item();
@@ -183,33 +169,10 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
 
                 addItem(item);
 
-
-
             }
         });
 
         return new PopupWindow(layout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (resultCode == CommonStatusCodes.SUCCESS && data != null) {
-
-            Item item = (Item) data.getSerializableExtra(Constants.ITEM);
-            items.add(item);
-
-            List itemsAsString = new ArrayList();
-
-            for (Item i : items) {
-                itemsAsString.add(i.toString());
-            }
-
-            ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, itemsAsString);
-
-            listView.setAdapter(adapter);
-        }
     }
 
     @Override
