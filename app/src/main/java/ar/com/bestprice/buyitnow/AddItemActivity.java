@@ -45,8 +45,7 @@ public class AddItemActivity extends AppCompatActivity implements View.OnClickLi
             arraySpinner.add(c);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arraySpinner);
 
 
         spinner.setAdapter(adapter);

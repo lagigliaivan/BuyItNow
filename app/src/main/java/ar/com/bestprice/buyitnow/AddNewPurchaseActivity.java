@@ -80,7 +80,9 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
             toolbar.post(new Runnable() {
                 public void run() {
                     try {
+
                         pw.showAtLocation(layout, Gravity.CENTER, 0, 30);
+
                         showKeyboard();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -119,13 +121,13 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
     private PopupWindow getPopUp(final View layout) {
 
         Spinner spinner = (Spinner) layout.findViewById(R.id.spinner);
-        ArrayList arraySpinner = new ArrayList();
+        List arraySpinner = new ArrayList();
 
         for (Category c : Category.values()) {
             arraySpinner.add(c);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arraySpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(layout.getContext(), android.R.layout.simple_spinner_dropdown_item, arraySpinner);
         spinner.setAdapter(adapter);
 
         Button addItemButton = (Button) layout.findViewById(R.id.add_item_button);
