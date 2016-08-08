@@ -130,6 +130,7 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
         ArrayAdapter<String> adapter = new ArrayAdapter<>(layout.getContext(), android.R.layout.simple_spinner_dropdown_item, arraySpinner);
         spinner.setAdapter(adapter);
 
+
         Button addItemButton = (Button) layout.findViewById(R.id.add_item_button);
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
