@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "771875379",
+    "project_id": "buyitnow-56ce2"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771875379:android:db886d5015d08845",
+        "android_client_info": {
+          "package_name": "ar.com.bestprice.buyitnow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771875379-9jlivedf892m5grfq3vec95qdc1phdaa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.com.bestprice.buyitnow",
+            "certificate_hash": "86379889A5365709BB9D720A782E1DF31612F38D"
+          }
+        },
+        {
+          "client_id": "771875379-pilgtd1p02qbmqi7ar9msf72asqdgj69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBiK-VC41s2OXZE3cshIzx9EVRQYU3tnw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

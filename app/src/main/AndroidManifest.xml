@@ -4,13 +4,12 @@
 
   <!--  <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />-->
-
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <uses-permission android:name="android.permission.ACCOUNT_MANAGER"/>
-    
 
     <application
         android:allowBackup="true"
@@ -52,4 +51,7 @@
         <activity android:name=".SignUpActivity" />
     </application>
 
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
 </manifest>
