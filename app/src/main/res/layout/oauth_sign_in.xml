@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
+<RelativeLayout android:id="@+id/RelativeLayout01"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    android:backgroundTintMode="screen"
+    android:background="@color/blue_grey_900_ivan">
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_sign_in_button"
+            android:id="@+id/google_sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/common_signin_button_text_long"
+            android:baselineAligned="false"
+            android:gravity="center"
+        android:layout_marginLeft="ºdp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="44dp">
+
+        </com.google.android.gms.common.SignInButton>
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/common_signin_button_text_long" />
+        android:id="@+id/imageView"
+        android:src="@drawable/light"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
-</LinearLayout>
+</RelativeLayout>
