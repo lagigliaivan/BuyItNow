@@ -8,16 +8,15 @@
     android:background="@color/blue_grey_900_ivan">
 
     <com.google.android.gms.common.SignInButton
-            android:id="@+id/google_sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/common_signin_button_text_long"
             android:baselineAligned="false"
             android:gravity="center"
-        android:layout_marginLeft="ºdp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="44dp">
+        android:id="@+id/google_sign_in_button"
+        android:layout_marginTop="67dp"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true">
 
         </com.google.android.gms.common.SignInButton>
 

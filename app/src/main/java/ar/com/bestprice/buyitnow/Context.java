@@ -11,10 +11,10 @@ import java.util.Formatter;
 public class Context {
 
     private static Context context = new Context();
-    private String user = "mayname@gmail.com.ar";
+    private String userEmail = "mayname@gmail.com.ar";
     private String pass = "password";
-    private String login;
-    //private String serviceURL = "http://ec2-52-39-112-162.us-west-2.compute.amazonaws.com:8080/catalog";
+    private String userSignInToken = "";
+
     private String serviceURL = "http://ec2-52-42-147-180.us-west-2.compute.amazonaws.com:8080/catalog";
 
     private Context(){}
@@ -27,8 +27,8 @@ public class Context {
         return serviceURL;
     }
 
-    public String getUser(){
-        return user;
+    public String getUserEmail(){
+        return userEmail;
     }
 
     public String getPass(){
@@ -39,22 +39,19 @@ public class Context {
         this.serviceURL = URL;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUserEmail(String email) {
+        this.userEmail = email;
     }
 
     public void setPass(String pass) {
         this.pass = pass;
     }
 
-    public void setLogin(String login) { this.login = login;}
-
-    public String getLogin() { return this.login;}
 
     public String getSha1()
     {
 
-        String userLogin[] = getUser().split("@");
+        String userLogin[] = getUserEmail().split("@");
         String user = userLogin[0];
         String mail = userLogin[1];
 
@@ -87,5 +84,13 @@ public class Context {
         String result = formatter.toString();
         formatter.close();
         return result;
+    }
+
+    public String getUserSignInToken() {
+        return userSignInToken;
+    }
+
+    public void setUserSignInToken(String userSignInToken) {
+        this.userSignInToken = userSignInToken;
     }
 }

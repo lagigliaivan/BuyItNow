@@ -28,7 +28,7 @@ public class GetUserNameTask extends AsyncTask {
         } catch (UserRecoverableAuthException userRecoverableException) {
             userRecoverableException.printStackTrace();
 
-            ((GmailLoging)mActivity).handleException(userRecoverableException);
+            ((GoogleSignIn)mActivity).handleException(userRecoverableException);
         } catch (GoogleAuthException fatalException) {
             fatalException.printStackTrace();
             // Some other type of unrecoverable exception has occurred.

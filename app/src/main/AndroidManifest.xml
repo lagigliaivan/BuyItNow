@@ -40,7 +40,7 @@
             android:label="Login">
 -->
 
-        <activity android:name=".GmailLoging"
+        <activity android:name=".GoogleSignIn"
             android:label="@string/app_name">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

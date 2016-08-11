@@ -43,7 +43,7 @@ public class PurchasesService {
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Authorization", Context.getContext().getSha1());
+                urlConnection.setRequestProperty("Authorization", Context.getContext().getUserSignInToken());
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
 
@@ -92,7 +92,7 @@ public class PurchasesService {
                 urlConnection = (HttpURLConnection) url.openConnection();
 
                 urlConnection.setRequestMethod("DELETE");
-                urlConnection.setRequestProperty("Authorization", Context.getContext().getSha1());
+                urlConnection.setRequestProperty("Authorization", Context.getContext().getUserSignInToken());
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
 
@@ -130,17 +130,12 @@ public class PurchasesService {
             @Override
             public String call() throws Exception{
 
-                HttpURLConnection urlConnection = null;
-                BufferedReader reader = null;
-                String purchases = "";
-
-                //URL url = new URL("http://10.33.117.120:8080/catalog/purchases?groupBy=month");
                 URL url = new URL(Context.getContext().getServiceURL() + "/purchases?groupBy=month");
 
                 // Create the request to OpenWeatherMap, and open the connection
-                urlConnection = (HttpURLConnection) url.openConnection();
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("Authorization", Context.getContext().getSha1());
+                urlConnection.setRequestProperty("Authorization", Context.getContext().getUserSignInToken());
                 urlConnection.connect();
 
                 // Read the input stream into a String
@@ -150,7 +145,7 @@ public class PurchasesService {
                     // Nothing to do.
                     return "";
                 }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -165,8 +160,7 @@ public class PurchasesService {
                     return "";
                 }
 
-                purchases = buffer.toString();
-                return purchases;
+                return buffer.toString();
         }});
 
         String response = "";

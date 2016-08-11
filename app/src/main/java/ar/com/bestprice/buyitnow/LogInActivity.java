@@ -12,11 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Formatter;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -77,7 +72,7 @@ public class LogInActivity extends AppCompatActivity {
 
 
         Context.getContext().setPass(password);
-        Context.getContext().setUser(email);
+        Context.getContext().setUserEmail(email);
 
         //String credential = encryptPassword(user + ":" + password + "@" + mail);
 
