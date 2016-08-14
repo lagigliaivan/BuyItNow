@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import ar.com.bestprice.buyitnow.dto.Item;
 import ar.com.bestprice.buyitnow.dto.Purchase;
@@ -463,6 +464,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<PurchasesByMonth> byMonths = new ArrayList<>();
 
+        Pattern p = Pattern.compile(Pattern.quote(pattern), Pattern.CASE_INSENSITIVE);
 
         for(PurchasesByMonth pByMonth : purchasesByMonths){
 
@@ -475,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
 
                 for(Item item: purchase.getItems()){
 
-                    if(item.getDescription().contains(pattern)){
+                    if(p.matcher(item.getDescription()).find()){
 
                         if (pWhereItemWasFound == null){
                             pWhereItemWasFound = new Purchase();

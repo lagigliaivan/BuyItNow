@@ -14,9 +14,8 @@
             android:baselineAligned="false"
             android:gravity="center"
         android:id="@+id/google_sign_in_button"
+        android:layout_marginBottom="141dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="182dp"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true">
 
         </com.google.android.gms.common.SignInButton>
