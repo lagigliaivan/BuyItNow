@@ -78,6 +78,7 @@
     <string name="add_item_category">Categoria</string>
     <string name="test">Test</string>
     <string name="delete">Borrar</string>
+    <string name="login_with_google">Login with google</string>
 
 
 </resources>

@@ -7,17 +7,36 @@
     android:backgroundTintMode="screen"
     android:background="@drawable/alligator">
 
-    <com.google.android.gms.common.SignInButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/common_signin_button_text_long"
-            android:baselineAligned="false"
-            android:gravity="center"
-        android:id="@+id/google_sign_in_button"
-        android:layout_marginBottom="141dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
 
-        </com.google.android.gms.common.SignInButton>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="346dp">
+
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebo_singin_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="0.50"
+            android:gravity="center_horizontal"
+            android:textStyle="normal" />
+
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:text="@string/login_with_google"
+            android:baselineAligned="false"
+            android:gravity="center_horizontal"
+            android:id="@+id/google_sign_in_button"
+            android:layout_marginBottom="141dp"
+            android:textAlignment="center" />
+
+    </LinearLayout>
 
 </RelativeLayout>

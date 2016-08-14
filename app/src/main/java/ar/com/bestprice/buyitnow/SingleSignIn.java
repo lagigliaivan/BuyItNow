@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,7 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 /**
  * Created by ivan on 07/08/16.
  */
-public class GoogleSignIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public class SingleSignIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     private static final int RC_SIGN_IN = 1;
     private static final int RC_MAIN_ACTIVITY = 2;
@@ -33,7 +34,7 @@ public class GoogleSignIn extends AppCompatActivity implements GoogleApiClient.O
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().requestIdToken(googleSignInClientId)
@@ -54,6 +55,8 @@ public class GoogleSignIn extends AppCompatActivity implements GoogleApiClient.O
                 pickUserAccount();
             }
         });
+
+
     }
 
     private void pickUserAccount() {

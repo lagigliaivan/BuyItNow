@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="delete">Delete</string>
     <string name="login_with_google">Login with google</string>
 </resources>
