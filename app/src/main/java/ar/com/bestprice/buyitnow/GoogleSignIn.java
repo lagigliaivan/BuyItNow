@@ -93,10 +93,11 @@ public class GoogleSignIn extends AppCompatActivity implements GoogleApiClient.O
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
 
-            //Context.getContext().setUserSignInToken(acct.getIdToken());
+            Context.getContext().setUserSignInToken(acct.getIdToken());
 
-            Context.getContext().setUserSignInToken(Context.getContext().getSha1());
+            //Context.getContext().setUserSignInToken(Context.getContext().getSha1());
             //Context.getContext().setUserEmail(acct.getEmail());
+
 
             Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
             startActivityForResult(intent, RC_MAIN_ACTIVITY);

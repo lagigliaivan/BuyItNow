@@ -111,8 +111,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
                 toast.show();
 
-
-
             }
         });
 
