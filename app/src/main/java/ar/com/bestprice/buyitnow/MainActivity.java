@@ -26,6 +26,9 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -304,6 +307,18 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog dialog = b.create();//AlertDialog dialog; create like this outside onClick
                 dialog.show();
+                break;
+
+
+            case R.id.logout:
+
+                if (getParent() == null) {
+                    setResult(1001);
+                } else {
+                    getParent().setResult(1001);
+                }
+
+                finish();
                 break;
         }
 

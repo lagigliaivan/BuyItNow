@@ -81,5 +81,8 @@
     <string name="delete">Delete</string>
     <string name="facebook_app_id">1644514075861990</string>
     <string name="login_with_google">Login with google</string>
+    <string name="filter_by_category">filter by category</string>
+    <string name="search_purchases">search purchases</string>
+    <string name="log_out">logout</string>
 
 </resources>

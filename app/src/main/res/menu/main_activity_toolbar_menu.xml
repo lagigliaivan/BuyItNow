@@ -4,20 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+    <item android:id="@+id/logout"
+        android:icon="@drawable/logout"
+        app:showAsAction="always"
+        android:title="@string/log_out"/>
+
     <item android:id="@+id/filter_purchases"
         android:icon="@drawable/ic_filter_list_white_36dp"
         app:showAsAction="always"
-        android:title="@string/refresh_purchases_list"/>
+        android:title="@string/filter_by_category"/>
 
     <item android:id="@+id/refresh_purchases"
         android:icon="@drawable/ic_refresh_white_24dp"
         app:showAsAction="always"
-        android:title="@string/refresh_purchases_list"/>
+        android:title="@string/refresh_purchases_list" />
 
     <item android:id="@+id/search_purchases"
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="always"
-        android:title="@string/refresh_purchases_list"/>
+        android:title="@string/search_purchases"/>
 
     <item android:id="@+id/add_item"
         android:icon="@drawable/ic_monetization_on_white_24dp"

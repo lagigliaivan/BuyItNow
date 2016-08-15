@@ -71,7 +71,7 @@ public class LogInActivity extends AppCompatActivity {
         Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
 
 
-        Context.getContext().setPass(password);
+        Context.getContext().setUserPass(password);
         Context.getContext().setUserEmail(email);
 
         //String credential = encryptPassword(user + ":" + password + "@" + mail);

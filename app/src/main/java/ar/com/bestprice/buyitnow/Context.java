@@ -10,10 +10,19 @@ import java.util.Formatter;
  */
 public class Context {
 
+    public enum SignInType {
+        GOOGLE,
+        FACEBOOK,
+        MAIL
+    }
+
+
     private static Context context = new Context();
     private String userEmail = "mayname@gmail.com.ar";
     private String pass = "password";
     private String userSignInToken = "";
+    private SignInType userSignInType = SignInType.MAIL;  //facebook, google
+
 
     private String serviceURL = "http://ec2-52-42-147-180.us-west-2.compute.amazonaws.com:8080/catalog";
 
@@ -37,18 +46,13 @@ public class Context {
         return pass;
     }
 
-    public void setServiceURL(String URL) {
-        this.serviceURL = URL;
-    }
-
     public void setUserEmail(String email) {
         this.userEmail = email;
     }
 
-    public void setPass(String pass) {
+    public void setUserPass(String pass) {
         this.pass = pass;
     }
-
 
     public String getSha1()
     {
@@ -94,5 +98,13 @@ public class Context {
 
     public void setUserSignInToken(String userSignInToken) {
         this.userSignInToken = userSignInToken;
+    }
+
+    public SignInType getUserSignInType() {
+        return userSignInType;
+    }
+
+    public void setUserSignInType(SignInType userSignInType) {
+        this.userSignInType = userSignInType;
     }
 }

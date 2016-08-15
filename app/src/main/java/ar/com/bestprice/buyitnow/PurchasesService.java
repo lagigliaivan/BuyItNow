@@ -1,14 +1,18 @@
 package ar.com.bestprice.buyitnow;
 
+import com.facebook.HttpMethod;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -36,18 +40,8 @@ public class PurchasesService {
 
             @Override
             public Integer call() throws Exception {
-                HttpURLConnection urlConnection = null;
-                int responseCode = 203;
 
-                URL url = new URL(Context.getContext().getServiceURL() + "/purchases");
-
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Authorization", Context.getContext().getUserSignInToken());
-                urlConnection.setDoInput(true);
-                urlConnection.setDoOutput(true);
-
-                urlConnection.connect();
+                HttpURLConnection urlConnection = getURLConnection("/purchases", "POST");
 
                 Gson gson = new Gson();
                 String it = gson.toJson(purchases);
@@ -59,8 +53,7 @@ public class PurchasesService {
                 writer.close();
                 os.close();
 
-                responseCode = urlConnection.getResponseCode();
-                return responseCode;
+                return urlConnection.getResponseCode();
 
         }});
 
@@ -84,30 +77,15 @@ public class PurchasesService {
 
             @Override
             public Integer call() throws Exception {
-                HttpURLConnection urlConnection = null;
-                int responseCode = 203;
 
-                URL url = new URL(Context.getContext().getServiceURL() + "/purchases/" + p.getId());
-
-                urlConnection = (HttpURLConnection) url.openConnection();
-
-                urlConnection.setRequestMethod("DELETE");
-                urlConnection.setRequestProperty("Authorization", Context.getContext().getUserSignInToken());
-                urlConnection.setDoInput(true);
-                urlConnection.setDoOutput(true);
-
-                urlConnection.connect();
-
-
+                HttpURLConnection urlConnection = getURLConnection("/purchases/" + p.getId(), "DELETE");
                 OutputStream os = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                //writer.write(it);
                 writer.flush();
                 writer.close();
                 os.close();
 
-                responseCode = urlConnection.getResponseCode();
-                return responseCode;
+                return urlConnection.getResponseCode();
 
             }});
 
@@ -130,33 +108,22 @@ public class PurchasesService {
             @Override
             public String call() throws Exception{
 
-                URL url = new URL(Context.getContext().getServiceURL() + "/purchases?groupBy=month");
+                HttpURLConnection urlConnection = getURLConnection("/purchases?groupBy=month", "GET");
 
-                // Create the request to OpenWeatherMap, and open the connection
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("Authorization", Context.getContext().getUserSignInToken());
-                urlConnection.connect();
-
-                // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
+
                 if (inputStream == null) {
-                    // Nothing to do.
                     return "";
                 }
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
                     buffer.append(line + "\n");
                 }
 
                 if (buffer.length() == 0) {
-                    // Stream was empty.  No point in parsing.
                     return "";
                 }
 
@@ -175,6 +142,25 @@ public class PurchasesService {
         }
 
         return response;
+    }
+
+    private HttpURLConnection getURLConnection(String resource, String httpMethod) throws IOException {
+
+        URL url = new URL(Context.getContext().getServiceURL() + resource);
+        HttpURLConnection   urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod(httpMethod);
+        urlConnection.setRequestProperty("Authorization", Context.getContext().getUserSignInToken());
+        urlConnection.setRequestProperty("TokenType ", Context.getContext().getUserSignInType().name());
+
+        //If http method is GET, then output does have not to be set.
+        if("GET".compareTo(httpMethod) != 0) {
+            urlConnection.setDoOutput(true);
+        }
+
+        urlConnection.setDoInput(true);
+        urlConnection.connect();
+
+        return urlConnection;
     }
 
 }
