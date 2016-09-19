@@ -1,6 +1,7 @@
 package ar.com.bestprice.buyitnow;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.ActionMode;
@@ -70,7 +71,14 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
 
-                PurchasesGroup group = (PurchasesGroup) getGroup(groupPosition);
+                //Intent intent = new Intent(this.getApplicationContext(), AddItemActivity.class);
+                Intent intent = new Intent(activity.getApplicationContext(), PurchaseItemsListActivity.class);
+                intent.putExtra(Constants.CALLING_ACTIVITY, children);
+                activity.startActivity(intent);
+
+
+
+              /*  PurchasesGroup group = (PurchasesGroup) getGroup(groupPosition);
 
                 Purchase purchase = group.getPurchase(children.getTime());
 
@@ -100,7 +108,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
                 Toast toast = Toast.makeText(parent.getContext(), stringBuffer.toString(), duration);
 
                 toast.show();
-
+*/
             }
         });
 
