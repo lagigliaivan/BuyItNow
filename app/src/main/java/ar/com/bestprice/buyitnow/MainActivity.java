@@ -122,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
 
                 for (Purchase purchase : sortedPurchases.get(month).getPurchases()){
 
-                    for(Item item: purchase.getItems()) {
+                    /*for(Item item: purchase.getItems()) {
                         item.setTime(purchase.getTime());
                         purchasesGroup.addItem(item);
-                    }
+                    }*/
                     purchasesGroup.addPurchase(purchase);
                 }
                 groups.put(j, purchasesGroup);

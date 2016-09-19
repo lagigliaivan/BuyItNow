@@ -83,24 +83,6 @@ public class AddItemActivity extends AppCompatActivity implements View.OnClickLi
                 String itemId = id.getText().toString();
 
 
-
-                if(itemId.isEmpty()){
-
-                    MessageDigest crypt = null;
-                    try {
-                        crypt = MessageDigest.getInstance("SHA-1");
-                        crypt.reset();
-                        crypt.update(description.getText().toString().getBytes("UTF-8"));
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-
-                    itemId = Context.byteToHex(crypt.digest());
-
-                }
-
                 Item item = new Item();
                 item.setId(itemId);
                 item.setDescription(description.getText().toString());

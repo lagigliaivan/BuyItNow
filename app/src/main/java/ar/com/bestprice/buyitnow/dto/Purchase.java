@@ -64,4 +64,15 @@ public class Purchase {
     public boolean isEmpty(){
         return items.isEmpty();
     }
+
+    public Double getTotalPrice(){
+
+        Double total = 0d;
+
+        for (Item item:items) {
+            total += item.getPrice();
+        }
+
+        return total;
+    }
 }

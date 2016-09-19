@@ -18,21 +18,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-import ar.com.bestprice.buyitnow.dto.Item;
 import ar.com.bestprice.buyitnow.dto.Purchase;
-import ar.com.bestprice.buyitnow.dto.Purchases;
 
 
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
@@ -51,7 +42,8 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public Object getChild(int groupPosition, int childPosition) {
 
-        return groups.get(groupPosition).getItemAt(childPosition);
+        //return groups.get(groupPosition).getItemAt(childPosition);
+        return groups.get(groupPosition).getPurchaseAt(childPosition);
     }
 
     @Override
@@ -64,14 +56,14 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, final ViewGroup parent) {
 
-        final Item children = (Item) getChild(groupPosition, childPosition);
+        final Purchase children = (Purchase) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.listrow_details, null);
         }
 
         TextView text = (TextView) convertView.findViewById(R.id.listrow_item_description);
-        text.setText(children.getDescription());
+        text.setText(children.getShop());
 
         text.setOnClickListener(new View.OnClickListener(){
 
@@ -81,8 +73,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
                 PurchasesGroup group = (PurchasesGroup) getGroup(groupPosition);
 
                 Purchase purchase = group.getPurchase(children.getTime());
-
-                purchase.getShop();
 
                 Calendar purchaseDateTime = Calendar.getInstance();
                 StringBuffer stringBuffer = new StringBuffer();
@@ -146,7 +136,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
                                 ((RelativeLayout)((view.getParent()).getParent())).setBackground(color);
 
                                 PurchasesGroup group = (PurchasesGroup) getGroup(groupPosition);
-                                group.removeItemAt(childPosition);
+                                group.removePurchaseAt(childPosition);
 
                                 Purchase purchase = group.getPurchase(children.getTime());
                                 PurchasesService purchasesService = new PurchasesService();
@@ -182,14 +172,15 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         });
 
         int icon = Category.MERCADERIA.getIcon();
-        if (children.getCategory() != null) {
+       /* if (children.getCategory() != null) {
             icon = children.getCategory().getIcon();
-        }
+        }*/
 
         text.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
         text = (TextView) convertView.findViewById(R.id.item_price);
-        text.setText(String.format("$%.2f", children.getPrice()));
+        //text.setText(String.format("$%.2f", children.getPrice()));
 
+        text.setText(String.format("$%.2f", children.getTotalPrice()));
         return convertView;
     }
 
@@ -250,7 +241,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         checkedTextView.setText(purchasesByMonth.getString());
 
 
-        float diff = purchasesByMonth.getPurchasesTotalPrice() - previousPurchasesByMonth.getPurchasesTotalPrice();
+        Double diff = purchasesByMonth.getPurchasesTotalPrice() - previousPurchasesByMonth.getPurchasesTotalPrice();
 
         diff = (diff * 100) / previousPurchasesByMonth.getPurchasesTotalPrice();
 
