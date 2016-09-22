@@ -57,14 +57,14 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, final ViewGroup parent) {
 
-        final Purchase children = (Purchase) getChild(groupPosition, childPosition);
+        final Purchase purchase = (Purchase) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.listrow_details, null);
         }
 
         TextView text = (TextView) convertView.findViewById(R.id.listrow_item_description);
-        text.setText(children.getShop());
+        text.setText(purchase.getShop());
 
         text.setOnClickListener(new View.OnClickListener(){
 
@@ -73,7 +73,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
                 //Intent intent = new Intent(this.getApplicationContext(), AddItemActivity.class);
                 Intent intent = new Intent(activity.getApplicationContext(), PurchaseItemsListActivity.class);
-                intent.putExtra(Constants.CALLING_ACTIVITY, children);
+                intent.putExtra(Constants.PURCHASE_ID, purchase.getId());
                 activity.startActivity(intent);
 
 
@@ -146,11 +146,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
                                 PurchasesGroup group = (PurchasesGroup) getGroup(groupPosition);
                                 group.removePurchaseAt(childPosition);
 
-                                Purchase purchase = group.getPurchase(children.getTime());
+                                Purchase p = group.getPurchase(purchase.getTime());
                                 PurchasesService purchasesService = new PurchasesService();
 
-                                if(purchase.isEmpty()){
-                                    purchasesService.deletePurchase(purchase);
+                                if(p.isEmpty()){
+                                    purchasesService.deletePurchase(p);
 
                                 }else {
 
@@ -188,7 +188,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         text = (TextView) convertView.findViewById(R.id.item_price);
         //text.setText(String.format("$%.2f", children.getPrice()));
 
-        text.setText(String.format("$%.2f", children.getTotalPrice()));
+        text.setText(String.format("$%.2f", purchase.getTotalPrice()));
         return convertView;
     }
 

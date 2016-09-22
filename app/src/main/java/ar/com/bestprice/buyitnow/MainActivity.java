@@ -74,14 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
     }
 
     private MyExpandableListAdapter getListViewAdapter(PurchasesByMonthContainer purchasesContainer) {
 
         Map<Integer, PurchasesGroup> groups = getSortedPurchasesGroups(purchasesContainer.getPurchasesByMonth());
         return new MyExpandableListAdapter(this, groups);
-
     }
 
     private String sendHttpRequest() {

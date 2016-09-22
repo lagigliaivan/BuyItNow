@@ -57,17 +57,17 @@ public class Context {
     public String getSha1()
     {
 
-        String userLogin[] = getUserEmail().split("@");
-        String user = userLogin[0];
-        String mail = userLogin[1];
+        //String userLogin[] = getUserEmail().split("@");
+       /* String user = userLogin[0];
+        String mail = userLogin[1];*/
 
         String sha1 = "";
         try
         {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();
-            String credentials = user + ":" + getPass() + "@" + mail ;
-            crypt.update(credentials.getBytes("UTF-8"));
+           // String credentials = user + "@" + mail ;
+            crypt.update(getUserEmail().getBytes("UTF-8"));
             sha1 = byteToHex(crypt.digest());
         }
         catch(NoSuchAlgorithmException e)
