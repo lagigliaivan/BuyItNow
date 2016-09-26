@@ -27,7 +27,6 @@ public class PurchaseItemsListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         renderList(purchaseId);
-
     }
 
 

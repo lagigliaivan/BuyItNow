@@ -189,7 +189,7 @@ public class PurchasesService {
 
     private HttpURLConnection getURLConnection(String resource, String httpMethod) throws IOException {
 
-        URL url = new URL(Context.getContext().getServiceURL() + "/" + Context.getContext().getSha1() + resource);
+        URL url = new URL(Context.getContext().getServiceURL() + "/users/" + Context.getContext().getSha1() + resource);
         HttpURLConnection   urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod(httpMethod);
         urlConnection.setRequestProperty("Authorization", Context.getContext().getUserSignInToken());
