@@ -72,7 +72,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
             public void onClick(View v) {
 
                 //Intent intent = new Intent(this.getApplicationContext(), AddItemActivity.class);
-                Intent intent = new Intent(activity.getApplicationContext(), PurchaseItemsListActivity.class);
+                Intent intent = new Intent(activity.getApplicationContext(), ar.com.bestprice.buyitnow.PurchaseItemsListActivity.class);
                 intent.putExtra(Constants.PURCHASE_ID, purchase.getId());
                 activity.startActivity(intent);
 

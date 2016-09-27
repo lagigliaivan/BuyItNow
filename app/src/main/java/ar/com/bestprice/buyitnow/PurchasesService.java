@@ -150,7 +150,7 @@ public class PurchasesService {
             @Override
             public String call() throws Exception{
 
-                HttpURLConnection urlConnection = getURLConnection("/purchase/" + purchaseId, "GET");
+                HttpURLConnection urlConnection = getURLConnection("/purchases/" + purchaseId, "GET");
 
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();

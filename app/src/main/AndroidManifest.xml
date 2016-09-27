@@ -32,6 +32,9 @@
         <activity android:name="ar.com.bestprice.buyitnow.AddNewPurchaseActivity"
             android:label="Add new purchase"/>
 
+        <activity android:name="ar.com.bestprice.buyitnow.PurchaseItemsListActivity"
+            android:label="List purchase"/>
+
         <activity android:name=".MainActivity"
                 android:label="@string/app_name"/>
 

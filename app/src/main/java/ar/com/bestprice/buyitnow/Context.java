@@ -57,10 +57,6 @@ public class Context {
     public String getSha1()
     {
 
-        //String userLogin[] = getUserEmail().split("@");
-       /* String user = userLogin[0];
-        String mail = userLogin[1];*/
-
         String sha1 = "";
         try
         {
