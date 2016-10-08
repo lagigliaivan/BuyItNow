@@ -2,7 +2,9 @@ package ar.com.bestprice.buyitnow;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -28,9 +30,6 @@ public class PurchaseItemsListActivity extends AppCompatActivity {
 
         String purchaseId = getIntent().getStringExtra(Constants.PURCHASE_ID);
 
-        /*getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);*/
-
         renderList(purchaseId);
     }
 
@@ -53,8 +52,6 @@ public class PurchaseItemsListActivity extends AppCompatActivity {
             this.listView = (ListView) findViewById(R.id.listView_list_items);
         }
 
-
-
         Gson gson = new Gson();
         Purchase ps = gson.fromJson(jsonString, Purchase.class);
 
@@ -62,6 +59,14 @@ public class PurchaseItemsListActivity extends AppCompatActivity {
         for (Item item : ps.getItems() ){
             items.add(item);
         }
+
+        CheckedTextView purchaseDescription = (CheckedTextView)findViewById(R.id.group_item_description);
+        purchaseDescription.setText(ps.getShop());
+
+
+        TextView totalAmount = (TextView)findViewById(R.id.total_amount);
+
+        totalAmount.setText(String.format("$%.2f", ps.getTotalPrice()));
 
 
         this.listView.setAdapter(new ItemsListAdapter(this.getApplicationContext(), items, this));

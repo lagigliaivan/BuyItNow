@@ -40,7 +40,6 @@ public class ItemsListAdapter extends ArrayAdapter<Item>{
 
         text.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
         TextView price = (TextView) view.findViewById(R.id.item_price);
-        //text.setText(String.format("$%.2f", children.getPrice()));
 
         price.setText(String.format("$%.2f", item.getPrice()));
 
