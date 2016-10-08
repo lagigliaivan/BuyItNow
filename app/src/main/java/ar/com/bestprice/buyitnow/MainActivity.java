@@ -74,14 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
     }
 
     private MyExpandableListAdapter getListViewAdapter(PurchasesByMonthContainer purchasesContainer) {
 
         Map<Integer, PurchasesGroup> groups = getSortedPurchasesGroups(purchasesContainer.getPurchasesByMonth());
         return new MyExpandableListAdapter(this, groups);
-
     }
 
     private String sendHttpRequest() {
@@ -122,10 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
                 for (Purchase purchase : sortedPurchases.get(month).getPurchases()){
 
-                    for(Item item: purchase.getItems()) {
-                        item.setTime(purchase.getTime());
-                        purchasesGroup.addItem(item);
-                    }
                     purchasesGroup.addPurchase(purchase);
                 }
                 groups.put(j, purchasesGroup);

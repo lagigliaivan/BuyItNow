@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:weightSum="1"
     android:gravity="left"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <RelativeLayout
 
@@ -14,18 +14,18 @@
         android:background="@color/blue_grey_900_ivan">
 
         <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/group_item_description"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="1dp"
-        android:gravity="left"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:paddingLeft="32dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:text="@string/test"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="3dp"
+            android:id="@+id/group_item_description"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:gravity="left"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingLeft="32dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/test"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="3dp"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -77,4 +77,13 @@
 
     </RelativeLayout>
 
+    <ListView
+        android:id="@+id/listView_list_items"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:visibility="visible"
+        android:layout_above="@+id/new_purchase_toolbar"
+        android:divider="@android:color/black">
+    </ListView>
 </LinearLayout>

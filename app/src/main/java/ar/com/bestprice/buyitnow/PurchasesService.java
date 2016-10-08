@@ -144,9 +144,52 @@ public class PurchasesService {
         return response;
     }
 
+    public String getPurchase(final String purchaseId) {
+
+        Future<String>  task = service.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception{
+
+                HttpURLConnection urlConnection = getURLConnection("/purchases/" + purchaseId, "GET");
+
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+
+                if (inputStream == null) {
+                    return "";
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line + "\n");
+                }
+
+                if (buffer.length() == 0) {
+                    return "";
+                }
+
+                return buffer.toString();
+            }});
+
+        String response = "";
+        try {
+            response =  task.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }finally {
+            service.shutdown();
+        }
+
+        return response;
+    }
+
+
     private HttpURLConnection getURLConnection(String resource, String httpMethod) throws IOException {
 
-        URL url = new URL(Context.getContext().getServiceURL() + resource);
+        URL url = new URL(Context.getContext().getServiceURL() + "/users/" + Context.getContext().getSha1() + resource);
         HttpURLConnection   urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod(httpMethod);
         urlConnection.setRequestProperty("Authorization", Context.getContext().getUserSignInToken());

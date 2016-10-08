@@ -71,7 +71,7 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
 
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(AddNewPurchaseActivity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(AddNewPurchaseActivity.LAYOUT_INFLATER_SERVICE);
         final View layout = inflater.inflate(R.layout.activity_add_purchase_item,(ViewGroup) findViewById(R.id.add_purchase_popup));
         pw = getPopUp(layout);
 
@@ -82,7 +82,6 @@ public class AddNewPurchaseActivity extends AppCompatActivity{
                     try {
 
                         pw.showAtLocation(layout, Gravity.CENTER, 0, 30);
-
                         showKeyboard();
                     } catch (Exception e) {
                         e.printStackTrace();

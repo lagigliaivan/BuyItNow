@@ -26,7 +26,7 @@ public class Context {
 
     private String serviceURL = "http://ec2-52-42-147-180.us-west-2.compute.amazonaws.com:8080/catalog";
 
-    //private String serviceURL = "http://192.168.0.5:8080/catalog";
+    //private String serviceURL = "http://192.168.0.9:8080/catalog";
 
     private Context(){}
 
@@ -57,17 +57,13 @@ public class Context {
     public String getSha1()
     {
 
-        String userLogin[] = getUserEmail().split("@");
-        String user = userLogin[0];
-        String mail = userLogin[1];
-
         String sha1 = "";
         try
         {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();
-            String credentials = user + ":" + getPass() + "@" + mail ;
-            crypt.update(credentials.getBytes("UTF-8"));
+           // String credentials = user + "@" + mail ;
+            crypt.update(getUserEmail().getBytes("UTF-8"));
             sha1 = byteToHex(crypt.digest());
         }
         catch(NoSuchAlgorithmException e)

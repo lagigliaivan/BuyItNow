@@ -11,5 +11,7 @@ public class Constants {
 
     public final static String ITEM = "Item";
 
+    public final static String PURCHASE_ID = "purchase_id";
+
 
 }
