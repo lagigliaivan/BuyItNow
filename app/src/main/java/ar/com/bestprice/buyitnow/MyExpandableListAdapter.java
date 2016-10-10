@@ -75,40 +75,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
                 Intent intent = new Intent(activity.getApplicationContext(), ar.com.bestprice.buyitnow.PurchaseItemsListActivity.class);
                 intent.putExtra(Constants.PURCHASE_ID, purchase.getId());
                 activity.startActivity(intent);
-
-
-
-              /*  PurchasesGroup group = (PurchasesGroup) getGroup(groupPosition);
-
-                Purchase purchase = group.getPurchase(children.getTime());
-
-                Calendar purchaseDateTime = Calendar.getInstance();
-                StringBuffer stringBuffer = new StringBuffer();
-
-                Date date = new Date(Long.parseLong(purchase.getId()) * 1000);
-                purchaseDateTime.setTime(date);
-
-                stringBuffer.append("Lugar:");
-                stringBuffer.append(purchase.getShop());
-                stringBuffer.append("\n");
-
-
-                stringBuffer.append("Dia: ");
-                stringBuffer.append(purchaseDateTime.get(Calendar.DAY_OF_MONTH));
-                stringBuffer.append("/");
-                stringBuffer.append(purchaseDateTime.get(Calendar.MONTH) + 1);  //do not know why, get returns one month less
-
-                stringBuffer.append(" ");
-                stringBuffer.append(purchaseDateTime.get(Calendar.HOUR));
-                stringBuffer.append(":");
-                stringBuffer.append(purchaseDateTime.get(Calendar.MINUTE));
-
-                int duration = Toast.LENGTH_LONG;
-
-                Toast toast = Toast.makeText(parent.getContext(), stringBuffer.toString(), duration);
-
-                toast.show();
-*/
             }
         });
 
@@ -180,13 +146,9 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         });
 
         int icon = Category.MERCADERIA.getIcon();
-       /* if (children.getCategory() != null) {
-            icon = children.getCategory().getIcon();
-        }*/
 
         text.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
         text = (TextView) convertView.findViewById(R.id.item_price);
-        //text.setText(String.format("$%.2f", children.getPrice()));
 
         text.setText(String.format("$%.2f", purchase.getTotalPrice()));
         return convertView;

@@ -1,48 +1,27 @@
 package ar.com.bestprice.buyitnow;
 
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.BoolRes;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-import ar.com.bestprice.buyitnow.dto.Item;
-import ar.com.bestprice.buyitnow.dto.Purchase;
-import ar.com.bestprice.buyitnow.dto.PurchasesByMonth;
 import ar.com.bestprice.buyitnow.dto.PurchasesByMonthContainer;
+import ar.com.bestprice.buyitnow.json.PurchaseHandler;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -54,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private PurchasesByMonthContainer purchasesContainer = null;
 
     private final Map<Category, Boolean> lastSelectedItems = new LinkedHashMap<>();
+    private final PurchaseHandler purchaseHandler = new PurchaseHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MyExpandableListAdapter getListViewAdapter(PurchasesByMonthContainer purchasesContainer) {
 
-        Map<Integer, PurchasesGroup> groups = getSortedPurchasesGroups(purchasesContainer.getPurchasesByMonth());
+        Map<Integer, PurchasesGroup> groups = purchaseHandler.getSortedPurchasesGroups(purchasesContainer.getPurchasesByMonth());
         return new MyExpandableListAdapter(this, groups);
     }
 
@@ -105,43 +85,7 @@ public class MainActivity extends AppCompatActivity {
         return listView;
     }
 
-    private Map<Integer, PurchasesGroup> getSortedPurchasesGroups(List<PurchasesByMonth> purchasesByMonth) {
 
-        Map<Month, PurchasesByMonth> sortedPurchases = sortPurchases(purchasesByMonth);
-
-        Map<Integer, PurchasesGroup> groups = new HashMap<>();
-
-        int j = 0;
-        for (Month month : Month.values()){
-
-            if (sortedPurchases.get(month) != null){
-
-                PurchasesGroup purchasesGroup = new PurchasesGroup(month);
-
-                for (Purchase purchase : sortedPurchases.get(month).getPurchases()){
-
-                    purchasesGroup.addPurchase(purchase);
-                }
-                groups.put(j, purchasesGroup);
-                j++;
-            }
-        }
-
-        return groups;
-
-    }
-
-    @NonNull
-    private Map<Month, PurchasesByMonth> sortPurchases(List<PurchasesByMonth> purchasesByMonth) {
-        Map<Month, PurchasesByMonth> sortedPurchases = new HashMap<>();
-
-        for (PurchasesByMonth purchases : purchasesByMonth) {
-
-            sortedPurchases.put(Month.valueOf(purchases.getMonth().toUpperCase()), purchases);
-
-        }
-        return sortedPurchases;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -154,9 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.add_item:
 
-                //Intent intent = new Intent(this.getApplicationContext(), AddItemActivity.class);
                 Intent intent = new Intent(this.getApplicationContext(), AddNewPurchaseActivity.class);
-                //intent.putExtra(Constants.CALLING_ACTIVITY, Constants.MAIN_ACTIVITY);
                 startActivity(intent);
 
                 break;
@@ -182,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
                         String m_Text = input.getText().toString();
 
-                        List purchasesByMonth = searchStringInPurchases(m_Text, purchasesContainer.getPurchasesByMonth());
+                        List purchasesByMonth = purchaseHandler.searchStringInPurchases(m_Text, purchasesContainer.getPurchasesByMonth());
 
                         PurchasesByMonthContainer container = new PurchasesByMonthContainer();
                         container.setPurchasesByMonth(purchasesByMonth);
@@ -221,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog.Builder b = new AlertDialog.Builder(this);
                 b.setTitle("Seleccione las categorias a filtrar");
-
 
 
                 if(lastSelectedItems.size() == 0){
@@ -278,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 if(categories.size() != 0){
 
-                                    List purchasesByMonth = getPurchasesByCategory(categories, purchasesContainer.getPurchasesByMonth());
+                                    List purchasesByMonth = purchaseHandler.getPurchasesByCategory(categories, purchasesContainer.getPurchasesByMonth());
 
                                     PurchasesByMonthContainer container = new PurchasesByMonthContainer();
                                     container.setPurchasesByMonth(purchasesByMonth);
@@ -406,9 +347,8 @@ public class MainActivity extends AppCompatActivity {
 //                "\n" +
 //                "]}";
 
-
         if (jsonString != null && !jsonString.isEmpty()){
-            purchasesContainer = parseJsonString(jsonString);
+            purchasesContainer = purchaseHandler.getPurchasesFromJson(jsonString);
             renderList(purchasesContainer);
         }
     }
@@ -427,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Map<Integer, PurchasesGroup> purchases = getSortedPurchasesGroups(purchasesContainer.getPurchasesByMonth());
+        Map<Integer, PurchasesGroup> purchases = purchaseHandler.getSortedPurchasesGroups(purchasesContainer.getPurchasesByMonth());
 
         float accumPurchases = 0;
 
@@ -450,13 +390,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private PurchasesByMonthContainer parseJsonString(String json){
-
-        Gson gson = new Gson();
-        PurchasesByMonthContainer p = gson.fromJson(json, PurchasesByMonthContainer.class);
-        return p;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_toolbar_menu, menu);
@@ -467,98 +400,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         renderPurchasesList();
-    }
-
-    private List<PurchasesByMonth> searchStringInPurchases(String pattern, List<PurchasesByMonth> purchasesByMonths){
-
-        List<PurchasesByMonth> byMonths = new ArrayList<>();
-
-        Pattern p = Pattern.compile(Pattern.quote(pattern), Pattern.CASE_INSENSITIVE);
-
-        for(PurchasesByMonth pByMonth : purchasesByMonths){
-
-            PurchasesByMonth pByMonthWhereItemWasFound = null;
-
-            for (Purchase purchase : pByMonth.getPurchases()){
-
-
-                Purchase pWhereItemWasFound = null;
-
-                for(Item item: purchase.getItems()){
-
-                    if(p.matcher(item.getDescription()).find()){
-
-                        if (pWhereItemWasFound == null){
-                            pWhereItemWasFound = new Purchase();
-                            pWhereItemWasFound.setTime(purchase.getTime());
-                            pWhereItemWasFound.setId(purchase.getId());
-                            pWhereItemWasFound.setShop(purchase.getShop());
-                        }
-
-                        pWhereItemWasFound.addItem(item);
-                    }
-                }
-
-                if(pWhereItemWasFound != null){
-                    if(pByMonthWhereItemWasFound == null) {
-                        pByMonthWhereItemWasFound = new PurchasesByMonth();
-                        pByMonthWhereItemWasFound.setMonth(pByMonth.getMonth());
-                    }
-                    pByMonthWhereItemWasFound.addPurchase(pWhereItemWasFound);
-                }
-            }
-
-            if(pByMonthWhereItemWasFound != null) {
-                byMonths.add(pByMonthWhereItemWasFound);
-            }
-        }
-
-        return byMonths;
-    }
-
-    private List<PurchasesByMonth> getPurchasesByCategory(List<Category> categories, List<PurchasesByMonth> purchasesByMonths){
-
-        List<PurchasesByMonth> byMonths = new ArrayList<>();
-
-
-        for(PurchasesByMonth pByMonth : purchasesByMonths){
-
-            PurchasesByMonth pByMonthWhereItemWasFound = null;
-
-            for (Purchase purchase : pByMonth.getPurchases()){
-
-
-                Purchase pWhereItemWasFound = null;
-
-                for(Item item: purchase.getItems()){
-
-                    if(categories.contains(item.getCategory())){
-
-                        if (pWhereItemWasFound == null){
-                            pWhereItemWasFound = new Purchase();
-                            pWhereItemWasFound.setId(purchase.getId());
-                            pWhereItemWasFound.setTime(purchase.getTime());
-                            pWhereItemWasFound.setShop(purchase.getShop());
-                        }
-
-                        pWhereItemWasFound.addItem(item);
-                    }
-                }
-
-                if(pWhereItemWasFound != null){
-                    if(pByMonthWhereItemWasFound == null) {
-                        pByMonthWhereItemWasFound = new PurchasesByMonth();
-                        pByMonthWhereItemWasFound.setMonth(pByMonth.getMonth());
-                    }
-                    pByMonthWhereItemWasFound.addPurchase(pWhereItemWasFound);
-                }
-            }
-
-            if(pByMonthWhereItemWasFound != null) {
-                byMonths.add(pByMonthWhereItemWasFound);
-            }
-        }
-
-        return byMonths;
     }
 }
