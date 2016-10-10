@@ -10,7 +10,7 @@
     <RelativeLayout
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="83dp"
         android:background="@color/blue_grey_900_ivan">
 
         <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,10 +23,14 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:text="@string/test"
+            android:ellipsize="end"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_marginBottom="3dp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/space3" />
 
         <TextView
 
@@ -40,9 +44,9 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:textColor="@android:color/white"
-            android:layout_below="@+id/space"
-            android:layout_alignBottom="@+id/space3"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true" />
 
         <Space
             android:layout_width="40px"
@@ -52,28 +56,25 @@
             android:layout_toStartOf="@+id/total_amount"
             android:layout_alignParentTop="true" />
 
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="% +15"
-            android:id="@+id/difference"
-            android:inputType="none"
-            android:textAlignment="center"
-            android:gravity="top|bottom"
-            android:layout_toStartOf="@+id/space3"
-            android:background="@color/common_plus_signin_btn_text_dark_disabled"
-            android:layout_alignBottom="@+id/total_amount"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp"
-            android:textColor="@android:color/white"
-            android:layout_alignTop="@+id/total_amount" />
-
         <Space
             android:layout_width="20px"
             android:layout_height="20px"
             android:id="@+id/space" />
+
+        <TextView
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/date"
+            android:layout_alignEnd="@+id/group_item_description"
+            android:layout_below="@+id/space3"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/white"
+            android:paddingLeft="32dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_alignParentBottom="true" />
 
     </RelativeLayout>
 

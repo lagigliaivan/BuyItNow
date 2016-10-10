@@ -8,7 +8,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import ar.com.bestprice.buyitnow.dto.Item;
 import ar.com.bestprice.buyitnow.dto.Purchase;
@@ -30,11 +33,15 @@ public class PurchaseItemsListActivity extends AppCompatActivity {
 
         String purchaseId = getIntent().getStringExtra(Constants.PURCHASE_ID);
 
-        renderList(purchaseId);
+        try {
+            renderList(purchaseId);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    private void renderList(String purchaseId) {
+    private void renderList(String purchaseId) throws ParseException {
 
 
         String jsonString = null;
@@ -63,6 +70,9 @@ public class PurchaseItemsListActivity extends AppCompatActivity {
         CheckedTextView purchaseDescription = (CheckedTextView)findViewById(R.id.group_item_description);
         purchaseDescription.setText(ps.getShop());
 
+        TextView date = (TextView)findViewById(R.id.date);
+
+        date.setText(formatPurchaseDate(ps.getTime()));
 
         TextView totalAmount = (TextView)findViewById(R.id.total_amount);
 
@@ -70,5 +80,16 @@ public class PurchaseItemsListActivity extends AppCompatActivity {
 
 
         this.listView.setAdapter(new ItemsListAdapter(this.getApplicationContext(), items, this));
+    }
+
+    public String formatPurchaseDate(String date) throws ParseException {
+
+        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy' ('hh:mm')'");
+
+        Date purchaseDate = parse.parse(date);
+
+        return format.format(purchaseDate);
+
     }
 }
