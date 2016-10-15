@@ -48,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         renderPurchasesList();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_tool_bar);
-
-        setSupportActionBar(toolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.main_tool_bar));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         return new MyExpandableListAdapter(this, groups);
     }
 
-    private String sendHttpRequest() {
+    private String getPurchases() {
 
         String jsonString = null;
 
@@ -84,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
         return listView;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -263,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void renderPurchasesList() {
 
-        String jsonString = sendHttpRequest();
+        String jsonString = getPurchases();
 
 
 //        String jsonString =  "{\"purchasesByMonth\":[\n" +

@@ -17,11 +17,8 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 import ar.com.bestprice.buyitnow.dto.Purchase;
@@ -208,7 +205,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
             differencePerMonth.setBackgroundColor(Color.rgb(34, 139, 34)); //GREEN
         }
 
-        checkedTextView.setText(purchasesByMonth.getString());
+        checkedTextView.setText(purchasesByMonth.getMonthAsString());
 
 
         Double diff = purchasesByMonth.getPurchasesTotalPrice() - previousPurchasesByMonth.getPurchasesTotalPrice();

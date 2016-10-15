@@ -3,8 +3,10 @@ package ar.com.bestprice.buyitnow.json;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.bind.CollectionTypeAdapterFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,7 @@ public class PurchaseHandler {
 
         Map<Month, PurchasesByMonth> sortedPurchases = sortPurchasesByMonth(purchasesByMonth);
 
+
         Map<Integer, PurchasesGroup> groups = new HashMap<>();
 
         int j = 0;
@@ -57,16 +60,29 @@ public class PurchaseHandler {
 
                 PurchasesGroup purchasesGroup = new PurchasesGroup(month);
 
-                for (Purchase purchase : sortedPurchases.get(month).getPurchases()){
+                List<Purchase> purchasesByPrice = sortByPrice(sortedPurchases.get(month).getPurchases());
+
+                for (Purchase purchase : purchasesByPrice){
 
                     purchasesGroup.addPurchase(purchase);
                 }
+
                 groups.put(j, purchasesGroup);
                 j++;
             }
         }
 
         return groups;
+
+    }
+
+    private List<Purchase> sortByPrice(List<Purchase> purchases) {
+
+        List<Purchase> sortedPurchases = purchases;
+
+        Collections.sort(purchases, Collections.<Purchase>reverseOrder());
+
+        return sortedPurchases;
 
     }
 

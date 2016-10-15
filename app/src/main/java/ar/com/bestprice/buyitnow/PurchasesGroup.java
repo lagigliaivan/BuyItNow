@@ -29,7 +29,7 @@ public class PurchasesGroup {
         return purchases;
     }
 
-    public String getString() {
+    public String getMonthAsString() {
         return month.toString();
     }
 

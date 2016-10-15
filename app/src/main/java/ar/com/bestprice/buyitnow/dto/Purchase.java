@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by ivan on 07/04/16.
  */
-public class Purchase {
+public class Purchase implements Comparable{
 
     String time;
     String shop;
@@ -74,5 +74,19 @@ public class Purchase {
         }
 
         return total;
+    }
+
+    @Override
+    public int compareTo(Object another) {
+
+        return this.getTotalPrice().compareTo( ((Purchase)another).getTotalPrice() );
+
+       /* if (this.getTotalPrice() > ((Purchase)another).getTotalPrice()) {
+            return 1;
+        } else if (this.getTotalPrice() < ((Purchase)another).getTotalPrice()){
+            return -1;
+        } else {
+            return 0;
+        }*/
     }
 }
